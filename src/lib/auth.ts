@@ -29,5 +29,11 @@ export const auth = betterAuth({
       maxAge: 5 * 60,
     },
   },
+  advanced: {
+    crossSubDomainCookies: {
+      enabled: true,
+    },
+    useSecureCookies: true,
+  },
   plugins: [openAPI()],
 });
