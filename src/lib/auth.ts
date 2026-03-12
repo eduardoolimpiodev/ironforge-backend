@@ -23,5 +23,12 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  advanced: {
+    cookieOptions: {
+      sameSite: "none",
+      secure: true,
+      httpOnly: true,
+    },
+  },
   plugins: [openAPI()],
 });
