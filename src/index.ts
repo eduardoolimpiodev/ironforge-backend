@@ -44,10 +44,20 @@ await app.register(fastifySwagger, {
 });
 
 await app.register(fastifyCors, {
-  origin: [
-    "http://localhost:3000",
-    "https://ironforge-frontend-6tdv8l3br-eduardoolimpiodevs-projects.vercel.app"
-  ],
+  origin: (origin, cb) => {
+    const allowedOrigins = [
+      "http://localhost:3000",
+      /^https:\/\/.*\.vercel\.app$/
+    ];
+    
+    if (!origin || allowedOrigins.some(allowed => 
+      typeof allowed === 'string' ? allowed === origin : allowed.test(origin)
+    )) {
+      cb(null, true);
+    } else {
+      cb(new Error('Not allowed by CORS'), false);
+    }
+  },
   credentials: true,
 });
 
