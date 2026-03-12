@@ -34,6 +34,8 @@ export const auth = betterAuth({
       enabled: true,
     },
     useSecureCookies: true,
+    generateSessionToken: true,
   },
+  secret: process.env.BETTER_AUTH_SECRET,
   plugins: [openAPI()],
 });
