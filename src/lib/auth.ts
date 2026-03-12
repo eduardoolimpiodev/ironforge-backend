@@ -5,7 +5,10 @@ import { openAPI } from "better-auth/plugins";
 import { prisma } from "./db.js";
 
 export const auth = betterAuth({
-  trustedOrigins: ["http://localhost:3000"],
+  trustedOrigins: [
+    "http://localhost:3000",
+    "https://ironforge-frontend-6tdv8l3br-eduardoolimpiodevs-projects.vercel.app"
+  ],
   emailAndPassword: {
     enabled: true,
   },
