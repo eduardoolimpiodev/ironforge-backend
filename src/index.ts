@@ -44,7 +44,10 @@ await app.register(fastifySwagger, {
 });
 
 await app.register(fastifyCors, {
-  origin: ["http://localhost:3000"],
+  origin: [
+    "http://localhost:3000",
+    "https://ironforge-frontend-6tdv8l3br-eduardoolimpiodevs-projects.vercel.app"
+  ],
   credentials: true,
 });
 
