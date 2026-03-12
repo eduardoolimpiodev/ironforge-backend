@@ -4,13 +4,13 @@ import { openAPI } from "better-auth/plugins";
 
 import { prisma } from "./db.js";
 
+const trustedOrigins = process.env.TRUSTED_ORIGINS 
+  ? process.env.TRUSTED_ORIGINS.split(",").map(url => url.trim())
+  : ["http://localhost:3000"];
+
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL || "https://ironforge-backend.onrender.com",
-  trustedOrigins: [
-    "http://localhost:3000",
-    "https://ironforge-frontend.vercel.app",
-    "https://*.vercel.app",
-  ],
+  trustedOrigins,
   emailAndPassword: {
     enabled: true,
   },
