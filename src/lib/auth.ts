@@ -4,20 +4,13 @@ import { openAPI } from "better-auth/plugins";
 
 import { prisma } from "./db.js";
 
-const isAllowedOrigin = (origin: string) => {
-  const allowedPatterns = [
-    /^http:\/\/localhost:3000$/,
-    /^https:\/\/.*\.vercel\.app$/,
-  ];
-  return allowedPatterns.some(pattern => pattern.test(origin));
-};
-
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL || "https://ironforge-backend.onrender.com",
-  trustedOrigins: (origin) => {
-    if (!origin) return true;
-    return isAllowedOrigin(origin);
-  },
+  trustedOrigins: [
+    "http://localhost:3000",
+    "https://ironforge-frontend.vercel.app",
+    "https://*.vercel.app",
+  ],
   emailAndPassword: {
     enabled: true,
   },
@@ -30,11 +23,10 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
-  advanced: {
-    cookieOptions: {
-      sameSite: "none",
-      secure: true,
-      httpOnly: true,
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60,
     },
   },
   plugins: [openAPI()],
