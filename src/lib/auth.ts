@@ -4,25 +4,14 @@ import { openAPI } from "better-auth/plugins";
 
 import { prisma } from "./db.js";
 
-const trustedOrigins = (origin: string) => {
-  const allowedOrigins = [
-    "http://localhost:3000",
-    "https://ironforge-frontend.vercel.app",
-  ];
-  
-  // Aceita qualquer URL de preview da Vercel
-  const vercelPreviewPattern = /^https:\/\/ironforge-frontend-[a-z0-9]+-eduardoolimpiodevs-projects\.vercel\.app$/;
-  
-  if (allowedOrigins.includes(origin) || vercelPreviewPattern.test(origin)) {
-    return true;
-  }
-  
-  return false;
-};
-
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL || "https://ironforge-backend.onrender.com",
-  trustedOrigins,
+  trustedOrigins: [
+    "http://localhost:3000",
+    "https://ironforge-frontend.vercel.app",
+    "https://ironforge-frontend-git-main-eduardoolimpiodevs-projects.vercel.app",
+    /^https:\/\/ironforge-frontend-[a-z0-9]+-eduardoolimpiodevs-projects\.vercel\.app$/,
+  ],
   emailAndPassword: {
     enabled: true,
   },
@@ -46,7 +35,6 @@ export const auth = betterAuth({
       enabled: true,
     },
     useSecureCookies: true,
-    generateSessionToken: true,
   },
   secret: process.env.BETTER_AUTH_SECRET,
   plugins: [openAPI()],
