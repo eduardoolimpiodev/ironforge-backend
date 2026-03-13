@@ -4,6 +4,8 @@ import { openAPI } from "better-auth/plugins";
 
 import { prisma } from "./db.js";
 
+// Trusted origins configuration for cross-origin authentication
+
 const trustedOrigins = process.env.TRUSTED_ORIGINS 
   ? process.env.TRUSTED_ORIGINS.split(",").map((url: string) => url.trim())
   : [
