@@ -13,6 +13,7 @@ const trustedOrigins = process.env.TRUSTED_ORIGINS
       "https://ironforge-frontend.vercel.app",
       "https://ironforge-frontend-git-main-eduardoolimpiodevs-projects.vercel.app",
       "https://ironforge-frontend-ribslm54a-eduardoolimpiodevs-projects.vercel.app",
+      "https://ironforge-frontend-6wwyuhg19-eduardoolimpiodevs-projects.vercel.app",
     ];
 
 export const auth = betterAuth({
