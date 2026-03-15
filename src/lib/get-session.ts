@@ -2,6 +2,7 @@ import { fromNodeHeaders } from "better-auth/node";
 import { FastifyRequest } from "fastify";
 
 import { auth } from "./auth.js";
+import { prisma } from "./db.js";
 
 export async function getSession(request: FastifyRequest) {
   console.log("=== GET SESSION DEBUG ===");
@@ -26,18 +27,30 @@ export async function getSession(request: FastifyRequest) {
     console.log("Token encontrado no header:", token.substring(0, 20) + "...");
     
     try {
-      // Valida o token usando Better Auth
-      const sessionFromToken = await auth.api.getSession({
-        headers: {
-          ...fromNodeHeaders(request.headers),
-          cookie: `better-auth.session_token=${token}`,
-        },
+      // Busca sessão diretamente no banco usando o token
+      const session = await prisma.session.findUnique({
+        where: { token },
+        include: { user: true },
       });
 
-      console.log("Sessão do token:", sessionFromToken ? "válida" : "inválida");
-      return sessionFromToken;
+      if (session && session.expiresAt > new Date()) {
+        console.log("Sessão válida encontrada no banco para user:", session.userId);
+        return {
+          session: {
+            token: session.token,
+            userId: session.userId,
+            expiresAt: session.expiresAt,
+            createdAt: session.createdAt,
+            updatedAt: session.updatedAt,
+          },
+          user: session.user,
+        };
+      }
+
+      console.log("Sessão não encontrada ou expirada");
+      return null;
     } catch (error) {
-      console.log("Erro ao validar token:", error);
+      console.log("Erro ao buscar sessão:", error);
       return null;
     }
   }
